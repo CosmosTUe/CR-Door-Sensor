@@ -13,8 +13,8 @@ char username[] = "m.c.p.kabel@student.tue.nl";
 char identity[] = "20181242";
 char password[] = "***********";
 
-const int DOORPIN = 5;
-const String token = "69";
+const int DOORPIN = 16;
+const String token = "***********";
 
 WiFiClient client;
 HTTPClient httpClient;
@@ -69,14 +69,14 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-  pinMode(DOORPIN, INPUT);
+  pinMode(DOORPIN, INPUT_PULLDOWN_16);
   prev_door = digitalRead(DOORPIN);
 }
 
 void loop() {
-  int door = digitalRead(DOORPIN);
+  int door = !digitalRead(DOORPIN);
   if(door != prev_door) {
-    String url = "http://131.155.187.141:8080/door-status?access_token=" + token + "&status=" + String(door);
+    String url = "http://cosmostue.nl/door-status?access_token=" + token + "&status=" + String(door);
     Serial.println(url);
     httpClient.begin(url);
     int httpCode = httpClient.GET();
@@ -87,5 +87,5 @@ void loop() {
   }
   prev_door = door;
 
-  delay(5000);
+  delay(1000);
 }
